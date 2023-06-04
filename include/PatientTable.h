@@ -1,31 +1,30 @@
 #pragma once
-#include <string>
-#include <iostream>
-#include <windows.h>
 #include "database.h"
 
-
-using namespace std;
 
 class PatientTable
 {
 private:
     //患者id列表
-    string* ID_list;
+    vector<string>* ID_list;
 
 public:
     PatientTable();
     ~PatientTable();
 
-    int has_id(const string& patient_id);
+    bool has_id(const string& patient_id);
 
-    string* get_attribute(const string& patient_id, const string& attribute_name);
+    string* get_id_by_phone(const string& phone);
 
-    void set_attribute(const string& patient_id, const string& attribute_name, const string& attribute_value);
+    string* get_new_id();
 
-    void add_patient(const string& patient_id);
+    string get_attribute(const string& patient_id, const string& attribute_name);
 
-    void delete_patient(const string& patient_id);
+    bool set_attribute(const string& patient_id, const string& attribute_name, const string& attribute_value);
+
+    bool add_patient(const string& patient_id);
+
+    bool delete_patient(const string& patient_id);
 };
 
 class PatientLogIn
