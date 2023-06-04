@@ -134,7 +134,7 @@ std::string SubDepartment_Table::getSubDepartmentDepartment(const std::string su
     return result;
 }
 
-void SubDepartment_Table::updateSubDepartmentName(std::string subdepartment_id, std::string subdepartment_name) {
+bool SubDepartment_Table::updateSubDepartmentName(std::string subdepartment_id, std::string subdepartment_name) {
     SQLHENV env;
     SQLHDBC dbc;
     SQLHSTMT stmt;
@@ -150,12 +150,14 @@ void SubDepartment_Table::updateSubDepartmentName(std::string subdepartment_id, 
 
     if (ret != SQL_SUCCESS) {
         std::cerr << "Error updating data" << std::endl;
+        return FALSE;
     }
     //断开数据库连接
     DisconnectDB(env, dbc, stmt);
+    return TRUE;
 }
 
-void SubDepartment_Table::updateSubDepartmentInfo(std::string subdepartment_id, std::string subdepartment_info) {
+bool SubDepartment_Table::updateSubDepartmentInfo(std::string subdepartment_id, std::string subdepartment_info) {
     SQLHENV env;
     SQLHDBC dbc;
     SQLHSTMT stmt;
@@ -171,12 +173,14 @@ void SubDepartment_Table::updateSubDepartmentInfo(std::string subdepartment_id, 
 
     if (ret != SQL_SUCCESS) {
         std::cerr << "Error updating data" << std::endl;
+        return FALSE;
     }
     //断开数据库连接
     DisconnectDB(env, dbc, stmt);
+    return TRUE;
 }
 
-void SubDepartment_Table::updateSubDepartmentDepartment(std::string subdepartment_id, std::string department_id) {
+bool SubDepartment_Table::updateSubDepartmentDepartment(std::string subdepartment_id, std::string department_id) {
     SQLHENV env;
     SQLHDBC dbc;
     SQLHSTMT stmt;
@@ -192,12 +196,14 @@ void SubDepartment_Table::updateSubDepartmentDepartment(std::string subdepartmen
 
     if (ret != SQL_SUCCESS) {
         std::cerr << "Error updating data" << std::endl;
+        return FALSE;
     }
     //断开数据库连接
     DisconnectDB(env, dbc, stmt);
+    return TRUE;
 }
 
-void SubDepartment_Table::insertSubDepartment(std::string subdepartment_id, std::string subdepartment_name, std::string subdepartment_info, std::string department_id) {
+bool SubDepartment_Table::insertSubDepartment(std::string subdepartment_id, std::string subdepartment_name, std::string subdepartment_info, std::string department_id) {
 
     SQLHENV env;
     SQLHDBC dbc;
@@ -223,16 +229,15 @@ void SubDepartment_Table::insertSubDepartment(std::string subdepartment_id, std:
 
     if (ret != SQL_SUCCESS) {
         std::cerr << "Error inserting data" << std::endl;
-    }
-    else if (ret == SQL_SUCCESS) {
-        std::cout << "success" << std::endl;
+        return FALSE;
     }
 
     //断开数据库连接
     DisconnectDB(env, dbc, stmt);
+    return TRUE;
 }
 
-void SubDepartment_Table::deleteSubDepartment(std::string subdepartment_id) {
+bool SubDepartment_Table::deleteSubDepartment(std::string subdepartment_id) {
     SQLHENV env;
     SQLHDBC dbc;
     SQLHSTMT stmt;
@@ -249,10 +254,12 @@ void SubDepartment_Table::deleteSubDepartment(std::string subdepartment_id) {
 
     if (ret != SQL_SUCCESS) {
         std::cerr << "Error updating data" << std::endl;
+        return FALSE;
     }
 
     //断开数据库连接
     DisconnectDB(env, dbc, stmt);
+    return TRUE;
 }
 
 /*

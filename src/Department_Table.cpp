@@ -91,7 +91,7 @@ std::string Department_Table::getDepartmentInfo(std::string department_id) {
     return result;
 }
 
-void Department_Table::updateDepartmentName(std::string department_id, std::string department_name) {
+bool Department_Table::updateDepartmentName(std::string department_id, std::string department_name) {
     SQLHENV env;
     SQLHDBC dbc;
     SQLHSTMT stmt;
@@ -107,12 +107,14 @@ void Department_Table::updateDepartmentName(std::string department_id, std::stri
 
     if (ret != SQL_SUCCESS) {
         std::cerr << "Error updating data" << std::endl;
+        return FALSE;
     }
     //断开数据库连接
     DisconnectDB(env, dbc, stmt);
+    return TRUE;
 }
 
-void Department_Table::updateDepartmentInfo(std::string department_id, std::string department_info) {
+bool Department_Table::updateDepartmentInfo(std::string department_id, std::string department_info) {
     SQLHENV env;
     SQLHDBC dbc;
     SQLHSTMT stmt;
@@ -128,12 +130,14 @@ void Department_Table::updateDepartmentInfo(std::string department_id, std::stri
 
     if (ret != SQL_SUCCESS) {
         std::cerr << "Error updating data" << std::endl;
+        return FALSE;
     }
     //断开数据库连接
     DisconnectDB(env, dbc, stmt);
+    return TRUE;
 }
 
-void Department_Table::insertDepartment(std::string department_id, std::string department_name , std::string department_info ) {
+bool Department_Table::insertDepartment(std::string department_id, std::string department_name , std::string department_info ) {
     SQLHENV env;
     SQLHDBC dbc;
     SQLHSTMT stmt;
@@ -157,16 +161,15 @@ void Department_Table::insertDepartment(std::string department_id, std::string d
 
     if (ret != SQL_SUCCESS) {
         std::cerr << "Error inserting data" << std::endl;
-    }
-    else if (ret == SQL_SUCCESS) {
-        std::cout << "success" << std::endl;
+        return FALSE;
     }
 
     //断开数据库连接
     DisconnectDB(env, dbc, stmt);
+    return TRUE;
 }
 
-void Department_Table::deleteDepartment(std::string department_id) {
+bool Department_Table::deleteDepartment(std::string department_id) {
     SQLHENV env;
     SQLHDBC dbc;
     SQLHSTMT stmt;
@@ -183,9 +186,11 @@ void Department_Table::deleteDepartment(std::string department_id) {
 
     if (ret != SQL_SUCCESS) {
         std::cerr << "Error updating data" << std::endl;
+        return FALSE;
     }
 
     //断开数据库连接
     DisconnectDB(env, dbc, stmt);
+    return TRUE;
 }
 
