@@ -180,196 +180,240 @@ void get_timetable(string doctor_id)
 //问喆予
 void login(std::string phone, std::string password)
 {
-  PatientTable patient_table=patient_table.NewPatientTable();//初始化更新患者表，这个类应该是结构体指针链表的形式吧
-  string password_tmp=patient_table.SearchPasswordByPhone(phone);//如果未注册，返回""空字符串
-  
-  string token="";
-  if(password_tmp=="")//==运算符重载,未注册，返回 403 Forbidden，code 1001
-  token="403 Forbidden, code 1001";
-  else if(password_tmp==password)//成功 - 返回 200 OK
-  token="200 OK";
-  else//密码错误 - 返回 403 Forbidden，code 1002
-  token="403 Forbidden, code 1002";
+    PatientTable patient_table;
+    string *patient_id = patient_table.get_id_by_phone(phone);
+    string password_tmp = patient_table.get_attribute(*patient_id, "password");//如果未注册，返回""空字符串
 
-  Json::Value Root;
-  Json::StyledWriter sw;
-  Root["token"]=Json::Value(token);
+    string token = "";
+    if (password_tmp == "")//==运算符重载,未注册，返回 403 Forbidden，code 1001
+        token = "403 Forbidden, code 1001";
+    else if (password_tmp == password)//成功 - 返回 200 OK
+        token = "200 OK";
+    else//密码错误 - 返回 403 Forbidden，code 1002
+        token = "403 Forbidden, code 1002";
 
-  ofstream os;
-  os.open("demo.json", std::ios::out | std::ios::trunc);
-  if (!os.is_open())
-    cout << "error:can not find or create the file which named \" demo.json\"." << endl;
-  os << sw.write(Root);
-  os.close();
-  return;
+    Json::Value Root;
+    Json::StyledWriter sw;
+    Root["token"] = Json::Value(token);
+
+    ofstream os;
+    os.open("demo.json", std::ios::out | std::ios::trunc);
+    if (!os.is_open())
+        cout << "error:can not find or create the file which named \" demo.json\"." << endl;
+    os << sw.write(Root);
+    os.close();
+    return;
 }
 
 void signup(std::string phone, std::string password, std::string name, std::string id_number, int gender, std::string ethnicity)
 {
-  PatientTable patient_table=patient_table.NewPatientTable();//初始化更新患者表，这个类应该是结构体指针链表的形式吧
-  string password_tmp=patient_table.SearchPasswordByPhone(phone);//如果未注册，返回""空字符串
-  
-  string token="";
-  if(password_tmp=="")//手机号未被注册
-  {
-    token=patient_table.AddNewPatient(phone,password,name,id_number,gender,ethnicity);//添加成功，返回string"200 OK"，否则返回""
-  }
-  else //手机号已被注册 - 返回 400 Bad Request，code 1003
-  {
-    token="400 Bad Request, code 1003";
-  }
+    PatientTable patient_table;
+    string patient_id = *patient_table.get_id_by_phone(phone);
+    string password_tmp = patient_table.get_attribute(patient_id, "password");//如果未注册，返回""空字符串
 
-  Json::Value Root;
-  Json::StyledWriter sw;
-  Root["token"]=Json::Value(token);
+    string token = "";
+    string string_gender;
+    if (gender == 1)
+    {
+        string_gender = '1';
+    }
+    else
+    {
+        string_gender = '2';
+    }
+    if (password_tmp == "")//手机号未被注册
+    {
+        patient_id = *patient_table.get_new_id();
+        patient_table.add_patient(patient_id);
+        (phone, password, name, id_number, gender, ethnicity);//添加成功，返回string"200 OK"，否则返回""
+        patient_table.set_attribute(patient_id, "phone", phone);
+        patient_table.set_attribute(patient_id, "password", password);
+        patient_table.set_attribute(patient_id, "name", name);
+        patient_table.set_attribute(patient_id, "id_number", id_number);
+        patient_table.set_attribute(patient_id, "gender", string_gender);
+        patient_table.set_attribute(patient_id, "ethnicity", ethnicity);
+        token = "200 OK";
+    }
+    else //手机号已被注册 - 返回 400 Bad Request，code 1003
+    {
+        token = "400 Bad Request, code 1003";
+    }
 
-  ofstream os;
-  os.open("demo.json", std::ios::out | std::ios::trunc);
-  if (!os.is_open())
-    cout << "error:can not find or create the file which named \" demo.json\"." << endl;
-  os << sw.write(Root);
-  os.close();
+    Json::Value Root;
+    Json::StyledWriter sw;
+    Root["token"] = Json::Value(token);
 
-  return;
+    ofstream os;
+    os.open("demo.json", std::ios::out | std::ios::trunc);
+    if (!os.is_open())
+        cout << "error:can not find or create the file which named \" demo.json\"." << endl;
+    os << sw.write(Root);
+    os.close();
+
+    return;
 }
 
 void newpwd(std::string phone, std::string old_password, std::string new_password)
 {
-    PatientTable patient_table=patient_table.NewPatientTable();//初始化更新患者表，这个类应该是结构体指针链表的形式吧
-  string password_tmp=patient_table.SearchPasswordByPhone(phone);//如果未注册，返回""空字符串
-  
-  string token="";
-  if(password_tmp=="")//未注册，返回 403 Forbidden，code 1001
-  token="403 Forbidden, code 1001";
-  else if(password_tmp!=old_password)//旧密码错误 - 返回 403 Forbidden，code 1002
-  token="403 Forbidden, code 1002";
-  else //修改密码
-  {
-    patient_table.UpdatePasswordByPhone(phone,new_password);
-    token="200 OK";
-  }
+    PatientTable patient_table;//初始化更新患者表，这个类应该是结构体指针链表的形式吧
+    string *patient_id = patient_table.get_id_by_phone(phone);
+    string password_tmp = patient_table.get_attribute(*patient_id, "password");//如果未注册，返回""空字符串
 
-  Json::Value Root;
-  Json::StyledWriter sw;
-  Root["token"]=Json::Value(token);
+    string token = "";
+    if (password_tmp == "")//未注册，返回 403 Forbidden，code 1001
+        token = "403 Forbidden, code 1001";
+    else if (password_tmp != old_password)//旧密码错误 - 返回 403 Forbidden，code 1002
+        token = "403 Forbidden, code 1002";
+    else //修改密码
+    {
+        patient_table.set_attribute(*patient_id, "password", new_password);
+        token = "200 OK";
+    }
 
-  ofstream os;
-  os.open("demo.json", std::ios::out | std::ios::trunc);
-  if (!os.is_open())
-    cout << "error:can not find or create the file which named \" demo.json\"." << endl;
-  os << sw.write(Root);
-  os.close();
-  return;
+    Json::Value Root;
+    Json::StyledWriter sw;
+    Root["token"] = Json::Value(token);
+
+    ofstream os;
+    os.open("demo.json", std::ios::out | std::ios::trunc);
+    if (!os.is_open())
+        cout << "error:can not find or create the file which named \" demo.json\"." << endl;
+    os << sw.write(Root);
+    os.close();
+    return;
 }
 
 void get_department_list()
 {
-  //用vector来存list
-  Department_Table department_table=department_table.NewDepartmentTable();//初始化更新科室表，这个类应该是结构体指针链表的形式吧
-  vector<department> department_list=department_table.GetDepartmentList();//出错的话返回空vector
-  Json::Value Root;
-  Json::StyledWriter sw;
-  
-  string token="";
-  if(department_list.size()==0)//出现错误 - 返回 500 Internal Server Error，code 1000
-  token="500 Internal Server Error, code 1000";
-  else
-  token="200 OK";
-  Root["token"]=Json::Value(token);
+    //用vector来存list
+    Department_Table department_table;
+    vector<string>* department_list = department_table.getDepartmentList();//出错的话返回NULL
+    Json::Value Root;
+    Json::StyledWriter sw;
 
-  for(int i=0;i<department_list.size();i++)
-  {
-    Root["data"][i]["id"]=Json::Value(department_list[i]->id);
-    Root["data"][i]["name"]=Json::Value(department_list[i]->name);
-  }
-  
-  ofstream os;
-  os.open("demo.json", std::ios::out | std::ios::trunc);
-  if (!os.is_open())
-    cout << "error:can not find or create the file which named \" demo.json\"." << endl;
-  os << sw.write(Root);
-  os.close();
+    string id = "";
+    string name = "";
+    string token = "";
+    if (department_list == NULL)//出现错误 - 返回 500 Internal Server Error，code 1000
+        token = "500 Internal Server Error, code 1000";
+    else
+        token = "200 OK";
+    Root["token"] = Json::Value(token);
 
-  return;
+    for (int i = 0; i < (*department_list).size(); i++)
+    {
+        id = (*department_list)[i];
+        name = department_table.getDepartmentName(id);
+        Root["data"][i]["id"] = Json::Value(id);
+        Root["data"][i]["name"] = Json::Value(name);
+    }
+
+    ofstream os;
+    os.open("demo.json", std::ios::out | std::ios::trunc);
+    if (!os.is_open())
+        cout << "error:can not find or create the file which named \" demo.json\"." << endl;
+    os << sw.write(Root);
+    os.close();
+
+    return;
 }
 
-void get_department_details(int department_id)
+void get_department_details(string department_id)
 {
-  Department_Table department_table=department_table.NewDepartmentTable();//初始化更新科室表，这个类应该是结构体指针链表的形式吧
-  string name=department_table.GetNameByID(department_id);//id不存在的话，返回""
-  string token="";
-  string description="";
-  vector<department> subdepartment_list;
-  Json::Value Root;
-  Json::StyledWriter sw;
-  if(name=="")//id不存在,- 返回 400 Bad Request，code 1005
-  {
-    token="400 Bad Request, code 1005";
-  }
-  else
-  {
-    description=department_table.GetDescriptionByID(department_id);
-    subdepartment_list=department_table.GetSublistByID(department_id);//出错的话返回空vector
-    if(subdepartment_list.size()==0)//出现错误 - 返回 500 Internal Server Error，code 1000
-    token="500 Internal Server Error, code 1000";
-    else
-    token="200 OK";
-  }
-
-  Root["token"]=Json::Value(token);
-  if(name!="")//科室id存在
-  {
-    Root["description"]=Json::Value(description);
-    for(int i=0;i<subdepartment_list.size();i++)
+    Department_Table department_table;
+    string name = department_table.getDepartmentName(department_id);//id不存在的话，返回""
+    string token = "";
+    string description = "";
+    Json::Value Root;
+    Json::StyledWriter sw;
+    string sub_name = "";
+    string sub_id = "";
+    if (name == "")//id不存在,- 返回 400 Bad Request，code 1005
     {
-      Root["sub_departs"][i]["id"]=subdepartment_list[i]->id;
-      Root["sub_departs"][i]["name"]=subdepartment_list[i]->name;
+        token = "400 Bad Request, code 1005";
+        Root["token"] = Json::Value(token);
     }
-  }
+    else
+    {
+        description = department_table.getDepartmentInfo(department_id);
+        SubDepartment_Table subdepartment_table;
+        vector<string>* subdepartment_list = subdepartment_table.getSubDepartmentIdByDepatmentId(department_id);//出错的话返回空vector
+        if (subdepartment_list == NULL)//出现错误 - 返回 500 Internal Server Error，code 1000
+            token = "500 Internal Server Error, code 1000";
+        else
+            token = "200 OK";
+        Root["token"] = Json::Value(token);
+        Root["description"] = Json::Value(description);
+        for (int i = 0; i < (*subdepartment_list).size(); i++)
+        {
+            sub_id = (*subdepartment_list)[i];
+            sub_name = subdepartment_table.getSubDepartmentName(sub_id);
+            Root["sub_departs"][i]["id"] = Json::Value(sub_id);
+            Root["sub_departs"][i]["name"] = Json::Value(sub_name);
+        }
+    }
 
-  ofstream os;
-  os.open("demo.json", std::ios::out | std::ios::trunc);
-  if (!os.is_open())
-    cout << "error:can not find or create the file which named \" demo.json\"." << endl;
-  os << sw.write(Root);
-  os.close();
-  return;
+
+    ofstream os;
+    os.open("demo.json", std::ios::out | std::ios::trunc);
+    if (!os.is_open())
+        cout << "error:can not find or create the file which named \" demo.json\"." << endl;
+    os << sw.write(Root);
+    os.close();
+    return;
 }
 
 void get_doctor_list()
 {
-  Doctor_Table doctor_table=doctor_table.NewDoctorTable();//初始化更新医生表，这个类应该是结构体指针链表的形式吧
-  vector<doctor> doctor_list=doctor_table.GetDoctorList();//出错的话返回空vector
-  string token;
-  Json::Value Root;
-  Json::StyledWriter sw;
-  if(doctor_list.size()==0)//出现错误 - 返回 500 Internal Server Error，code 1000
-    token="500 Internal Server Error, code 1000";
-  else
-    token="200 OK";
-  Root["token"]=Json::Value(token);
-  for(int i=0;i<doctor_list.size();i++)
-  {
-    Root["doctors"][i]["id"]=Json::Value(doctor_list[i]->id);
-    Root["doctors"][i]["name"]=Json::Value(doctor_list[i]->name);
-    Root["doctors"][i]["sub_departs_id"]=Json::Value(doctor_list[i]->sub_depart_id);
-    Root["doctors"][i]["sub_depart_name"]=Json::Value(doctor_list[i]->sub_depart_name);
-    Root["doctors"][i]["description"]=Json::Value(doctor_list[i]->description);
-    for(int j=0;j<14;j++)
-    {
-      Root["doctors"][i]["schedule"][j]["capacity"]=Json::Value(doctor_list[i]->schedule[2*j]);
-      Root["doctors"][i]["schedule"][j]["remain"]=Json::Value(doctor_list[i]->schedule[2*j+1]);
-    }
-  }
+    DoctorTable doctor_table;
+    vector<string>* doctor_list = doctor_table.get_doctor_list();//出错的话返回NULL
+    string token;
+    Json::Value Root;
+    Json::StyledWriter sw;
+    string doctor_id = "";
+    string doctor_name = "";
+    string doctor_sub_depart_id = "";
+    string doctor_sub_depart_name = "";
+    string doctor_description = "";
+    int doctor_schedule[28];
 
-  ofstream os;
-  os.open("demo.json", std::ios::out | std::ios::trunc);
-  if (!os.is_open())
-    cout << "error:can not find or create the file which named \" demo.json\"." << endl;
-  os << sw.write(Root);
-  os.close();
-  return;
+    if (doctor_list == NULL)//出现错误 - 返回 500 Internal Server Error，code 1000
+        token = "500 Internal Server Error, code 1000";
+    else
+        token = "200 OK";
+    Root["token"] = Json::Value(token);
+    for (int i = 0; i < (*doctor_list).size(); i++)
+    {
+        doctor_id = (*doctor_list)[i];
+        doctor_name = doctor_table.get_string_attribute(doctor_id, "name");
+        doctor_sub_depart_id = doctor_table.get_string_attribute(doctor_id, "doctor_sub_depart_id");
+        doctor_sub_depart_name = doctor_table.get_string_attribute(doctor_id, "doctor_sub_depart_name");
+        doctor_description = doctor_table.get_string_attribute(doctor_id, "doctor_description");
+        Root["doctors"][i]["id"] = Json::Value(doctor_id);
+        Root["doctors"][i]["name"] = Json::Value(doctor_name);
+        Root["doctors"][i]["sub_departs_id"] = Json::Value(doctor_sub_depart_id);
+        Root["doctors"][i]["sub_depart_name"] = Json::Value(doctor_sub_depart_name);
+        Root["doctors"][i]["description"] = Json::Value(doctor_description);
+        Schedule schedule;
+        string time[14];
+        for (int j = 0; j < 14; j++)
+        {
+            doctor_schedule[2 * j] = schedule.GetTotal(doctor_id, time[j]);
+            doctor_schedule[2 * j + 1] = schedule.GetRest(doctor_id, time[j]);
+            Root["doctors"][i]["schedule"][j]["capacity"] = Json::Value(doctor_schedule[2 * j]);
+            Root["doctors"][i]["schedule"][j]["remain"] = Json::Value(doctor_schedule[2 * j + 1]);
+        }
+    }
+
+    ofstream os;
+    os.open("demo.json", std::ios::out | std::ios::trunc);
+    if (!os.is_open())
+        cout << "error:can not find or create the file which named \" demo.json\"." << endl;
+    os << sw.write(Root);
+    os.close();
+    return;
 }
+
 
 
 //朱圣铭
@@ -387,8 +431,8 @@ void get_subdepartment_doctor_list(string subdepartment_id)
     {
         Json::Value doctor;
         doctor["id"] = Json::Value(doctor_list[i]);
-        string* doctor_name = doctortable.get_string_attribute(doctor_list[i],"name");        //string* 会不会改
-        doctor["name"] = Json::Value(doctor_name[0]);
+        string doctor_name = doctortable.get_string_attribute(doctor_list[i],"name");        //string* 会不会改
+        doctor["name"] = Json::Value(doctor_name);
         for(int i = 0;i < 14;i++)
         {
             Json::Value time_schedule;
@@ -399,8 +443,8 @@ void get_subdepartment_doctor_list(string subdepartment_id)
             time_schedule["remain"] = Json::Value(rest);
             doctor["schedule"].append(time_schedule);
         }
-        string* doctor_description = doctortable.get_string_attribute(doctor_list[i],"introduction");
-        doctor["description"] = Json::Value(doctor_description[0]);
+        string doctor_description = doctortable.get_string_attribute(doctor_list[i],"introduction");
+        doctor["description"] = Json::Value(doctor_description);
         doctor["image_url"] = "...";                                         //姑且先空着
         Root["doctors"].append(doctor);
     }
