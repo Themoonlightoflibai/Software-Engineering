@@ -194,3 +194,42 @@ bool Department_Table::deleteDepartment(std::string department_id) {
     return TRUE;
 }
 
+std::vector<std::string>* Department_Table::getDepartmentList() {
+    std::vector<std::string>* list = new std::vector<std::string>;
+    
+    SQLHENV env;
+    SQLHDBC dbc;
+    SQLHSTMT stmt;
+    SQLRETURN ret;
+    SQLLEN indicator;
+    //连接数据库
+    ConnectDB(env, dbc, stmt);
+    //执行查询
+    ret = SQLPrepare(stmt, (SQLCHAR*)"SELECT * FROM medical.Department;", SQL_NTS);
+
+    ret = SQLExecute(stmt);
+
+    while (SQLFetch(stmt) != SQL_NO_DATA) {
+        SQLCHAR buffer[512];
+        ret = SQLGetData(stmt, 2, SQL_C_CHAR, buffer, sizeof(buffer), &indicator);
+        if (ret == SQL_SUCCESS || ret == SQL_SUCCESS_WITH_INFO) {
+            if (indicator == SQL_NULL_DATA) {
+                std::cout << "No data found" << std::endl;
+            }
+            else {
+                // 数据不为NULL，存储在buffer中. 则直接转换为string
+                std::string *temp = new std::string(reinterpret_cast<const char*>(buffer));
+                list->push_back(*temp);
+                
+            }
+        }
+        else {
+            // 检索数据失败
+            std::cerr << "Error fetching data" << std::endl;
+            return nullptr;
+        }
+    }
+    //断开数据库连接
+    DisconnectDB(env, dbc, stmt);
+    return list;
+}
