@@ -3,8 +3,8 @@
 #include <vector>
 #include <sql.h>
 #include <sqlext.h>
-#include "jsoncpp.cpp"
 
+/*
 //根据分工完成如下表的类的定义
 class Patient_Table;
 class Doctor_Table;
@@ -32,3 +32,4 @@ void create_appointment(std::string patient_id, std::string doctor_id, int secti
 void cancel_appointment(std::string appointment_id);
 void get_patient_data(std::string patient_id);
 void modify_patient_data(std::string patient_id, std::string name, int gender, std::string ethnicity, std::string id_number, std::string phone_number);
+*/

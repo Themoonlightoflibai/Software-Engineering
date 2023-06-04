@@ -6,6 +6,7 @@
 #include <string>
 #include <iostream>
 #include <vector>
+#include "json.h"
 
 using std::string;
 using std::vector;
