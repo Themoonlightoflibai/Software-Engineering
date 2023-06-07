@@ -7,7 +7,7 @@ class Registration {
         // 默认构造函数
         //Registration(){}
         // 添加挂号记录
-        bool AddRegistration(string &pat_id, string &apa_id, string &id);
+        string AddRegistration(string &pat_id, string &apa_id);
         // 删除挂号记录
         bool DeleteRegistration(string &id);
         // 根据患者id查找子科室id
