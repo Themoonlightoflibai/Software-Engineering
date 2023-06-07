@@ -1,7 +1,9 @@
 #include "Registration.h"
+#include <stdlib.h>
+#include <time.h>
 
 // 添加挂号记录
-bool Registration::AddRegistration(string &pat_id, string &apa_id, string &id)
+string Registration::AddRegistration(string &pat_id, string &apa_id)
 {
     
     SQLHENV env;  //环境句柄
@@ -14,6 +16,9 @@ bool Registration::AddRegistration(string &pat_id, string &apa_id, string &id)
 
     // 返回值
     SQLRETURN ret;  
+    // 生成随机id
+    long long id_ = rand();
+    string id = std::to_string(id_);    
     // sql预编译语句
     string SQL = "INSERT INTO medical.Registration (pat_id, apa_id, id) VALUES (?, ?, ?)";
     SQLPrepare(stmt, (SQLCHAR*)SQL.c_str(), SQL_NTS);
@@ -26,9 +31,9 @@ bool Registration::AddRegistration(string &pat_id, string &apa_id, string &id)
     // SQL语句返回结果为失败
     if (ret != SQL_SUCCESS && ret != SQL_SUCCESS_WITH_INFO)
     {
-        return false;
+        return "Failed";
     }
-    return true;
+    return id;
 }
 // 删除挂号记录
 bool Registration::DeleteRegistration(string &id)
