@@ -1,5 +1,5 @@
--- SQLBook: Code
--- Active: 1685814392069@@127.0.0.1@3306
+
+drop DATABASE medical;
 create DATABASE medical;
 use  medical;
 CREATE TABLE patient (
@@ -15,15 +15,15 @@ CREATE TABLE patient (
     password VARCHAR(255)
 );
 
-CREATE TABLE doctortable(
+CREATE TABLE doctor(
     id VARCHAR(255) PRIMARY KEY,
     name VARCHAR(255),
     img VARCHAR(255),
     gender VARCHAR(255),
     title VARCHAR(255),
-    phone VARCHAR(255),
     introcuction VARCHAR(255),
     patient VARCHAR(255),
+    phone VARCHAR(255),
     password VARCHAR(255)
 );
 
@@ -42,42 +42,50 @@ CREATE TABLE SubDepartment(
 );
 
 
-CREATE TABLE Registration(
-    id VARCHAR(255),
-    pat_id VARCHAR(255),
+CREATE TABLE registration(
+    id VARCHAR(255) PRIMARY KEY,
+    patient_id VARCHAR(255),
     apa_id VARCHAR(255),
-    primary key (id, pat_id, apa_id)
-    # FOREIGN KEY (pat_id) REFERENCES patient(id),
-    # FOREIGN KEY (apa_id) REFERENCES SubDepartment(id)
+    FOREIGN KEY (patient_id) REFERENCES patient(id),
+    FOREIGN KEY (apa_id) REFERENCES SubDepartment(id)
 );
 
-CREATE TABLE Doctor_SubDepartment(
-    doc_id VARCHAR(255),
+CREATE TABLE doctor_subdepartment(
+    doc_id VARCHAR(255) PRIMARY KEY,
     apa_id VARCHAR(255),
-    primary key (doc_id, apa_id)
-    # FOREIGN KEY (doc_id) REFERENCES doctortable(id),
-    # FOREIGN KEY (apa_id) REFERENCES SubDepartment(id)
+    FOREIGN KEY (doc_id) REFERENCES doctor(id),
+    FOREIGN KEY (apa_id) REFERENCES SubDepartment(id)
 );
 
-CREATE TABLE Appointment(
+CREATE TABLE appointment(
     pat_id VARCHAR(255),
     doc_id VARCHAR(255),
-    apa_time VARCHAR(255),
+    app_time VARCHAR(255),
     info VARCHAR(255),
-    id VARCHAR(255),
-    primary key (pat_id, doc_id, id)
-    # FOREIGN KEY (pat_id) REFERENCES patient(id),
-    # FOREIGN KEY (doc_id) REFERENCES doctortable(id),
-    # FOREIGN KEY (id) REFERENCES registration(id)
+    app_id VARCHAR(255),
+    primary key (pat_id, doc_id),
+    FOREIGN KEY (pat_id) REFERENCES patient(id),
+    FOREIGN KEY (doc_id) REFERENCES doctor(id),
+    FOREIGN KEY (app_id) REFERENCES registration(id)
 );
 
-CREATE TABLE Schedule(
+CREATE TABLE schdeule(
     doc_id VARCHAR(255),
-    doc_time VARCHAR(255),
+    doc_schedule DATETIME,
     rest INT,
     total INT,
-    primary key (doc_id, doc_time)
-    # FOREIGN KEY (doc_id) REFERENCES doctortable(id)
+    primary key (doc_id, doc_schedule),
+    FOREIGN KEY (doc_id) REFERENCES doctor(id)
 );
-DEFAULT CHARACTER SET = 'utf8mb4';
-
+insert into medical.doctor values('22156335','李四','http://dummyimage.com/400x400','1','主治医师','毕业于北京大学医学院，擅长脑部肿瘤手术','335568','18888888888','123456');
+#SELECT * FROM medical.doctor ;
+update medical.doctor set patient = '335568,559863' where id='22156335';
+#SELECT * FROM medical.doctor ;
+insert into medical.patient values('335568','张三','http://dummyimage.com/400x400','小臂骨裂','1','http://dummy.com/400','18888888888','汉族','52688436586422482203','123456');
+update medical.patient set phone = '16666666666' where id='335568';
+insert into medical.Department values('99853','骨科','骨骼相关疾病');
+insert into medical.SubDepartment values('58866','骨科处置室','处置相关骨骼手术','99853');
+insert into medical.registration values('99853','335568','58866');
+#SELECT * FROM medical.registration ;
+insert into medical.appointment values('335568','22156335','202308061','复查','99853');
+SELECT * FROM medical.patient ;
