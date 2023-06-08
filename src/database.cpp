@@ -130,7 +130,7 @@ void modify_doctor_data(std::string doctor_id, int type, std::string content)
     attribute[3] = "gender";
     attribute[4] = "title";
     attribute[5] = "phone";
-    attribute[6] = "introcuction";
+    attribute[6] = "introduction";
 
     bool flag = doctor_table.set_string_attribute(doctor_id, attribute[type], content);//flag为1代表操作成功
     if (flag==1) token="200 OK";
