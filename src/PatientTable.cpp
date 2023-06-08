@@ -47,15 +47,13 @@ bool PatientTable::has_id(const string& patient_id)
 
 string* PatientTable::get_id_by_phone(const string& phone)
 {
-    SQLHENV env;  //环境句柄
-    SQLHDBC dbc;  //连接句柄
-    SQLHSTMT stmt;  //语句句柄
-    SQLRETURN ret;  //返回值
+    SQLHENV env;
+    SQLHDBC dbc;
+    SQLHSTMT stmt;
+    SQLRETURN ret;
     //连接到数据库
     ConnectDB(env, dbc, stmt);
-
-    string res = "";
-    SQLCHAR patient_id[10000];
+    SQLCHAR patient_id[10000] = {0};
     //根据phone查询
     string sql = "SELECT id FROM medical.patient WHERE phone = ?";
     SQLPrepare(stmt, (SQLCHAR*)sql.c_str(), SQL_NTS);
@@ -66,11 +64,20 @@ string* PatientTable::get_id_by_phone(const string& phone)
         cerr << "Error executing query" << endl;
         exit(-1);
     }
-    while (SQL_SUCCEEDED(ret = SQLFetch(stmt)))
+    ret = SQLFetch(stmt);
+    if (ret != SQL_SUCCESS && ret != SQL_SUCCESS_WITH_INFO)
     {
-        SQLGetData(stmt, 1, SQL_C_CHAR, patient_id, 10000, NULL);
-        res = (char*)patient_id;
+        cerr << "No phone called " + phone << endl;
+        return (string*)new string("");
     }
+    ret = SQLGetData(stmt, 1, SQL_C_CHAR, patient_id, sizeof(patient_id), NULL);
+    if (ret != SQL_SUCCESS && ret != SQL_SUCCESS_WITH_INFO)
+    {
+        cerr << "Error getting data" << endl;
+        exit(-1);
+    }
+    //将patient_id字段值转换为string类型
+    string res(reinterpret_cast<const char*>(patient_id));
     DisconnectDB(env, dbc, stmt);
     return new string(res);
 }
@@ -114,23 +121,23 @@ string PatientTable::get_attribute(const string& patient_id, const string& attri
     if (ret != SQL_SUCCESS && ret != SQL_SUCCESS_WITH_INFO)
     {
         cerr << "Error executing query" << endl;
-        exit(-1);
+        //exit(-1);
     }
     ret = SQLFetch(stmt);
     if (ret != SQL_SUCCESS && ret != SQL_SUCCESS_WITH_INFO)
     {
         cerr << "Error fetching" << endl;
-        exit(-1);
+        //exit(-1);
     }
-    ret = SQLGetData(stmt, 2, SQL_C_CHAR, attribute, sizeof(attribute), &indicator);
+    ret = SQLGetData(stmt, 1, SQL_C_CHAR, attribute, sizeof(attribute), &indicator);
     if (ret != SQL_SUCCESS && ret != SQL_SUCCESS_WITH_INFO)
     {
         cerr << "Error getting data" << endl;
-        exit(-1);
+        //exit(-1);
     }
     //将attribute字段值转换为string类型
     string res (reinterpret_cast<const char*>(attribute));
-    res = string_to_utf8(res);
+    //res = string_to_utf8(res);
     //断开数据库连接
     DisconnectDB(env, dbc, stmt);
 

@@ -18,7 +18,7 @@ using std::string;
 using std::ofstream;
 
 //张铭杰
-void get_patient_data(std::string patient_id)
+void doctor_get_patient_data(std::string patient_id)
 {
   PatientTable patient_table;
   Registration registeration;
@@ -341,16 +341,21 @@ void login(std::string phone, std::string password)
 {
   PatientTable patient_table;
   string *patient_id=patient_table.get_id_by_phone(phone);
-  string password_tmp=patient_table.get_attribute(*patient_id,"password");//如果未注册，返回""空字符串
-  
-  string token="";
-  if(password_tmp=="")//==运算符重载,未注册，返回 403 Forbidden，code 1001
-  token="403 Forbidden, code 1001";
-  else if(password_tmp==password)//成功 - 返回 200 OK
-  token="200 OK";
-  else//密码错误 - 返回 403 Forbidden，code 1002
-  token="403 Forbidden, code 1002";
-
+  string token = "";
+  //如果能够查询到id说明已经注册
+  if (*patient_id != "") {
+      string password_tmp = patient_table.get_attribute(*patient_id, "password");//如果未注册，返回""空字符串
+      
+      if (password_tmp == "")//==运算符重载,未注册，返回 403 Forbidden，code 1001
+          token = "403 Forbidden, code 1001";
+      else if (password_tmp == password)//成功 - 返回 200 OK
+          token = "200 OK";
+      else//密码错误 - 返回 403 Forbidden，code 1002
+          token = "403 Forbidden, code 1002";
+  }//否则说明未注册
+  else {
+      token = "403 Forbidden, code 1001";
+  }
   Json::Value Root;
   Json::StyledWriter sw;
   Root["token"]=Json::Value(token);
@@ -361,7 +366,7 @@ void login(std::string phone, std::string password)
     cout << "error:can not find or create the file which named \" demo.json\"." << endl;
   os << sw.write(Root);
   os.close();
-  return;
+  //return;
 }
 
 void signup(std::string phone, std::string password, std::string name, std::string id_number, int gender, std::string ethnicity)
@@ -724,7 +729,7 @@ void cancel_appointment(std::string appointment_id,std::string parent_id)
     os.close();
 }
 
-void get_patient_data(std::string patient_id)                 
+void patient_get_patient_data(std::string patient_id)                 
 {
     PatientTable patienttable;
     Json::Value Root;
@@ -756,6 +761,8 @@ void get_patient_data(std::string patient_id)
     os << sw.write(Root);
     os.close();
 }
+
+
 void modify_patient_data(std::string patient_id, std::string name, std::string gender, std::string ethnicity, std::string id_number, std::string phone_number)
 {
     PatientTable patienttable;

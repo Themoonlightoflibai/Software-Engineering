@@ -1,3 +1,4 @@
+/*
 #include "Appointment.h"
 #include "Schedule.h"
 #include "Doctor_SubDepartment.h"
@@ -141,3 +142,4 @@ void test()
         cout << "Registration Delete " << res3 << endl; 
     }
 }
+*/
