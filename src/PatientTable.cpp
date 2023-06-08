@@ -127,12 +127,14 @@ string PatientTable::get_attribute(const string& patient_id, const string& attri
     if (ret != SQL_SUCCESS && ret != SQL_SUCCESS_WITH_INFO)
     {
         cerr << "Error fetching" << endl;
+        return "";
         //exit(-1);
     }
     ret = SQLGetData(stmt, 1, SQL_C_CHAR, attribute, sizeof(attribute), &indicator);
     if (ret != SQL_SUCCESS && ret != SQL_SUCCESS_WITH_INFO)
     {
         cerr << "Error getting data" << endl;
+        return "";
         //exit(-1);
     }
     //将attribute字段值转换为string类型

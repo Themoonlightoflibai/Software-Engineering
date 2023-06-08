@@ -101,7 +101,7 @@ int Schedule::GetRest(string &doc_id, string time)
     ConnectDB(env, dbc, stmt);
 
     // 进行查询
-    string SQL = "SELECT rest FROM medical.Schedule WHERE doc_id = ? AND doc_time = ?;";
+    string SQL = "SELECT rest FROM medical.Schedule WHERE doc_id = ? AND doc_schedule = ?;";
     SQLPrepare(stmt, (SQLCHAR*)SQL.c_str(), SQL_NTS);
     SQLBindParameter(stmt, 1, SQL_PARAM_INPUT, SQL_C_CHAR, SQL_CHAR, 0, 0, (SQLCHAR*)doc_id.c_str(), 0, NULL);
     SQLBindParameter(stmt, 2, SQL_PARAM_INPUT, SQL_C_CHAR, SQL_CHAR, 0, 0, (SQLCHAR*)time.c_str(), 0, NULL);
@@ -117,6 +117,9 @@ int Schedule::GetRest(string &doc_id, string time)
     if (SQL_SUCCEEDED(SQLFetch(stmt)))
     {
         SQLGetData(stmt, 1, SQL_C_SLONG, &rest_, sizeof(rest_), &indicator);
+    }
+    else {
+        return -1;
     }
     //断开数据库连接
     DisconnectDB(env, dbc, stmt);

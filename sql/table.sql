@@ -71,7 +71,7 @@ CREATE TABLE appointment(
 
 CREATE TABLE schdeule(
     doc_id VARCHAR(255),
-    doc_schedule DATETIME,
+    doc_schedule VARCHAR(255),
     rest INT,
     total INT,
     primary key (doc_id, doc_schedule),
@@ -88,4 +88,37 @@ insert into medical.SubDepartment values('58866','骨科处置室','处置相关
 insert into medical.registration values('99853','335568','58866');
 #SELECT * FROM medical.registration ;
 insert into medical.appointment values('335568','22156335','202308061','复查','99853');
+insert into medical.schdeule values('22156335', '2023-06-01,1',30,30);
+insert into medical.schdeule values('22156335', '2023-06-01,2',30,30);
+insert into medical.schdeule values('22156335', '2023-06-02,1',30,30);
+insert into medical.schdeule values('22156335', '2023-06-02,2',30,30);
+insert into medical.schdeule values('22156335', '2023-06-03,1',30,30);
+insert into medical.schdeule values('22156335', '2023-06-03,2',30,30);
+insert into medical.schdeule values('22156335', '2023-06-04,1',30,30);
+insert into medical.schdeule values('22156335', '2023-06-04,2',30,30);
+insert into medical.schdeule values('22156335', '2023-06-05,1',30,30);
+insert into medical.schdeule values('22156335', '2023-06-05,2',30,30);
+insert into medical.schdeule values('22156335', '2023-06-06,1',30,30);
+insert into medical.schdeule values('22156335', '2023-06-06,2',30,30);
+insert into medical.schdeule values('22156335', '2023-06-07,1',30,30);
+insert into medical.schdeule values('22156335', '2023-06-07,2',30,30);
+insert into medical.schdeule values('22156335', '2023-06-08,1',30,30);
+insert into medical.schdeule values('22156335', '2023-06-08,2',30,30);
+insert into medical.schdeule values('22156335', '2023-06-09,1',30,30);
+insert into medical.schdeule values('22156335', '2023-06-09,2',30,30);
+insert into medical.schdeule values('22156335', '2023-06-10,1',30,30);
+insert into medical.schdeule values('22156335', '2023-06-10,2',30,30);
+insert into medical.schdeule values('22156335', '2023-06-11,1',30,30);
+insert into medical.schdeule values('22156335', '2023-06-11,2',30,30);
+insert into medical.schdeule values('22156335', '2023-06-12,1',30,30);
+insert into medical.schdeule values('22156335', '2023-06-12,2',30,30);
+insert into medical.schdeule values('22156335', '2023-06-13,1',30,30);
+insert into medical.schdeule values('22156335', '2023-06-13,2',30,30);
+insert into medical.schdeule values('22156335', '2023-06-14,1',30,30);
+insert into medical.schdeule values('22156335', '2023-06-14,2',30,30);
+insert into medical.schdeule values('22156335', '2023-06-15,1',30,30);
+insert into medical.schdeule values('22156335', '2023-06-15,2',30,30);
+insert into medical.schdeule values('22156335', '2023-06-16,1',30,30);
+insert into medical.schdeule values('22156335', '2023-06-16,2',30,30);
 SELECT * FROM medical.patient ;
+SELECT id FROM medical.patient WHERE phone = '18888888888';

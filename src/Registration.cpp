@@ -78,7 +78,7 @@ string Registration::GetSubDepartmentId(string &pat_id)
     // 返回值
     SQLRETURN ret;  
     // sql预编译语句
-    string SQL = "SELECT apa_id FROM medical.Registration WHERE pat_id = ?";
+    string SQL = "SELECT apa_id FROM medical.Registration WHERE patient_id = ?";
     SQLPrepare(stmt, (SQLCHAR*)SQL.c_str(), SQL_NTS);
     SQLBindParameter(stmt, 1, SQL_PARAM_INPUT, SQL_C_CHAR, SQL_CHAR, 0, 0, (SQLCHAR*)pat_id.c_str(), 0, NULL);
     
@@ -88,12 +88,15 @@ string Registration::GetSubDepartmentId(string &pat_id)
     // SQL语句返回结果为失败
     if (ret != SQL_SUCCESS && ret != SQL_SUCCESS_WITH_INFO)
     {
-        return "Failed";
+        return "";
     }
     SQLCHAR apa_id_[256];
     if (SQL_SUCCEEDED(SQLFetch(stmt)))
     {
         SQLGetData(stmt, 1, SQL_CHAR, apa_id_, sizeof(apa_id_), NULL);
+    }
+    else {
+        return "";
     }
     
     string res((const char*)apa_id_);

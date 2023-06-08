@@ -26,7 +26,7 @@ void doctor_get_patient_data(std::string patient_id)
   Json::StyledWriter sw;
 
   Root["id"]=Json::Value(patient_id);
-  Root["img"]=Json::Value(patient_table.get_attribute(patient_id,"img"));
+  Root["image"]=Json::Value(patient_table.get_attribute(patient_id,"img"));
   Root["name"]=Json::Value(patient_table.get_attribute(patient_id,"name"));
   Root["gender"]=Json::Value(patient_table.get_attribute(patient_id,"gender"));
   Root["menu"]=Json::Value(registeration.GetSubDepartmentId(patient_id));
@@ -166,7 +166,7 @@ void get_timetable(string doctor_id)
     switch(weekend[0])
     {
         case '1' :  Root["timetable"]["周一"]["1"]=Json::Value(bool(schedule_table.GetRest(doctor_id,middle + ",1")!=0));
-                    Root["timetable"]["周一"]["1"]=Json::Value(bool(schedule_table.GetRest(doctor_id,middle + ",2")!=0));
+                    Root["timetable"]["周一"]["2"]=Json::Value(bool(schedule_table.GetRest(doctor_id,middle + ",2")!=0));
                     middle = Tomorrow(middle);
                     Root["timetable"]["周二"]["1"]=Json::Value(bool(schedule_table.GetRest(doctor_id,middle + ",1")!=0));
                     Root["timetable"]["周二"]["2"]=Json::Value(bool(schedule_table.GetRest(doctor_id,middle + ",2")!=0));
@@ -190,7 +190,7 @@ void get_timetable(string doctor_id)
                     Root["timetable"]["周二"]["2"]=Json::Value(bool(schedule_table.GetRest(doctor_id,middle + ",2")!=0));
                     middle = Yesterday(middle);
                     Root["timetable"]["周一"]["1"]=Json::Value(bool(schedule_table.GetRest(doctor_id,middle + ",1")!=0));
-                    Root["timetable"]["周一"]["1"]=Json::Value(bool(schedule_table.GetRest(doctor_id,middle + ",2")!=0));
+                    Root["timetable"]["周一"]["2"]=Json::Value(bool(schedule_table.GetRest(doctor_id,middle + ",2")!=0));
                     middle = Tomorrow(middle);
                     middle = Tomorrow(middle);
                     Root["timetable"]["周三"]["1"]=Json::Value(bool(schedule_table.GetRest(doctor_id,middle + ",1")!=0));
@@ -212,10 +212,10 @@ void get_timetable(string doctor_id)
                     Root["timetable"]["周三"]["2"]=Json::Value(bool(schedule_table.GetRest(doctor_id,middle + ",2")!=0));
                     middle = Yesterday(middle);
                     Root["timetable"]["周二"]["1"]=Json::Value(bool(schedule_table.GetRest(doctor_id,middle + ",1")!=0));
-                    Root["timetable"]["周二"]["1"]=Json::Value(bool(schedule_table.GetRest(doctor_id,middle + ",2")!=0));
+                    Root["timetable"]["周二"]["2"]=Json::Value(bool(schedule_table.GetRest(doctor_id,middle + ",2")!=0));
                     middle = Yesterday(middle);
                     Root["timetable"]["周一"]["1"]=Json::Value(bool(schedule_table.GetRest(doctor_id,middle + ",1")!=0));
-                    Root["timetable"]["周一"]["1"]=Json::Value(bool(schedule_table.GetRest(doctor_id,middle + ",2")!=0));
+                    Root["timetable"]["周一"]["2"]=Json::Value(bool(schedule_table.GetRest(doctor_id,middle + ",2")!=0));
                     middle = Tomorrow(middle);
                     middle = Tomorrow(middle);
                     middle = Tomorrow(middle);
@@ -238,10 +238,10 @@ void get_timetable(string doctor_id)
                     Root["timetable"]["周三"]["2"]=Json::Value(bool(schedule_table.GetRest(doctor_id,middle + ",2")!=0));
                     middle = Yesterday(middle);
                     Root["timetable"]["周二"]["1"]=Json::Value(bool(schedule_table.GetRest(doctor_id,middle + ",1")!=0));
-                    Root["timetable"]["周二"]["1"]=Json::Value(bool(schedule_table.GetRest(doctor_id,middle + ",2")!=0));
+                    Root["timetable"]["周二"]["2"]=Json::Value(bool(schedule_table.GetRest(doctor_id,middle + ",2")!=0));
                     middle = Yesterday(middle);
                     Root["timetable"]["周一"]["1"]=Json::Value(bool(schedule_table.GetRest(doctor_id,middle + ",1")!=0));
-                    Root["timetable"]["周一"]["1"]=Json::Value(bool(schedule_table.GetRest(doctor_id,middle + ",2")!=0));
+                    Root["timetable"]["周一"]["2"]=Json::Value(bool(schedule_table.GetRest(doctor_id,middle + ",2")!=0));
                     middle = Tomorrow(middle);
                     middle = Tomorrow(middle);
                     middle = Tomorrow(middle);
@@ -265,10 +265,10 @@ void get_timetable(string doctor_id)
                     Root["timetable"]["周三"]["2"]=Json::Value(bool(schedule_table.GetRest(doctor_id,middle + ",2")!=0));
                     middle = Yesterday(middle);
                     Root["timetable"]["周二"]["1"]=Json::Value(bool(schedule_table.GetRest(doctor_id,middle + ",1")!=0));
-                    Root["timetable"]["周二"]["1"]=Json::Value(bool(schedule_table.GetRest(doctor_id,middle + ",2")!=0));
+                    Root["timetable"]["周二"]["2"]=Json::Value(bool(schedule_table.GetRest(doctor_id,middle + ",2")!=0));
                     middle = Yesterday(middle);
                     Root["timetable"]["周一"]["1"]=Json::Value(bool(schedule_table.GetRest(doctor_id,middle + ",1")!=0));
-                    Root["timetable"]["周一"]["1"]=Json::Value(bool(schedule_table.GetRest(doctor_id,middle + ",2")!=0));
+                    Root["timetable"]["周一"]["2"]=Json::Value(bool(schedule_table.GetRest(doctor_id,middle + ",2")!=0));
                     middle = Tomorrow(middle);
                     middle = Tomorrow(middle);
                     middle = Tomorrow(middle);
@@ -293,10 +293,10 @@ void get_timetable(string doctor_id)
                     Root["timetable"]["周三"]["2"]=Json::Value(bool(schedule_table.GetRest(doctor_id,middle + ",2")!=0));
                     middle = Yesterday(middle);
                     Root["timetable"]["周二"]["1"]=Json::Value(bool(schedule_table.GetRest(doctor_id,middle + ",1")!=0));
-                    Root["timetable"]["周二"]["1"]=Json::Value(bool(schedule_table.GetRest(doctor_id,middle + ",2")!=0));
+                    Root["timetable"]["周二"]["2"]=Json::Value(bool(schedule_table.GetRest(doctor_id,middle + ",2")!=0));
                     middle = Yesterday(middle);
                     Root["timetable"]["周一"]["1"]=Json::Value(bool(schedule_table.GetRest(doctor_id,middle + ",1")!=0));
-                    Root["timetable"]["周一"]["1"]=Json::Value(bool(schedule_table.GetRest(doctor_id,middle + ",2")!=0));
+                    Root["timetable"]["周一"]["2"]=Json::Value(bool(schedule_table.GetRest(doctor_id,middle + ",2")!=0));
                     middle = Tomorrow(middle);
                     middle = Tomorrow(middle);
                     middle = Tomorrow(middle);
@@ -322,10 +322,10 @@ void get_timetable(string doctor_id)
                     Root["timetable"]["周三"]["2"]=Json::Value(bool(schedule_table.GetRest(doctor_id,middle + ",2")!=0));
                     middle = Yesterday(middle);
                     Root["timetable"]["周二"]["1"]=Json::Value(bool(schedule_table.GetRest(doctor_id,middle + ",1")!=0));
-                    Root["timetable"]["周二"]["1"]=Json::Value(bool(schedule_table.GetRest(doctor_id,middle + ",2")!=0));
+                    Root["timetable"]["周二"]["2"]=Json::Value(bool(schedule_table.GetRest(doctor_id,middle + ",2")!=0));
                     middle = Yesterday(middle);
                     Root["timetable"]["周一"]["1"]=Json::Value(bool(schedule_table.GetRest(doctor_id,middle + ",1")!=0));
-                    Root["timetable"]["周一"]["1"]=Json::Value(bool(schedule_table.GetRest(doctor_id,middle + ",2")!=0));
+                    Root["timetable"]["周一"]["2"]=Json::Value(bool(schedule_table.GetRest(doctor_id,middle + ",2")!=0));
     }
 
     ofstream os;
