@@ -11,9 +11,9 @@ class Schedule {
         // 修改排班, change始终等于1，choice---1为取消，2为增加
         bool ChangeRest(string &doc_id, string &time, int &change, int &choice);
         // 获取余量
-        int GetRest(string &doc_id, string &time);
+        int GetRest(string &doc_id, string time);
         // 获取总量
-        int GetTotal(string &doc_id, string &time);
+        int GetTotal(string &doc_id, string time);
         // 获取时间
         vector<string> GetTime(string &doc_id);
         //~Schedule();

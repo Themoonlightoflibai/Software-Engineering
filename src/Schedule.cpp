@@ -90,7 +90,7 @@ bool Schedule::ChangeRest(string &doc_id, string &time, int &change, int &choice
 }
 
 // 获取余量
-int Schedule::GetRest(string &doc_id, string &time)
+int Schedule::GetRest(string &doc_id, string time)
 {
     SQLHENV env;  //环境句柄
     SQLHDBC dbc;  //连接句柄
@@ -124,7 +124,7 @@ int Schedule::GetRest(string &doc_id, string &time)
     return rest_;
 }
 // 获取总量
-int Schedule::GetTotal(string &doc_id, string &time)
+int Schedule::GetTotal(string &doc_id, string time)
 {
     SQLHENV env;  //环境句柄
     SQLHDBC dbc;  //连接句柄
